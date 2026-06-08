@@ -159,11 +159,14 @@ export default function App() {
         },
       };
 
-      const response = await fetch("http://localhost:8000/research-stream", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch(
+        "https://launchly-production-a598.up.railway.app/research-stream",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
+      );
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
@@ -215,8 +218,8 @@ export default function App() {
 
   const downloadPdf = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8000/export-pdf",
+      const response = await fetch(
+        "https://launchly-production-a598.up.railway.app/research-stream",
         {
           cover_letter: result,
           user_info: {
