@@ -218,8 +218,8 @@ export default function App() {
 
   const downloadPdf = async () => {
     try {
-      const response = await fetch(
-        "https://launchly-production-a598.up.railway.app/research-stream",
+      const response = await axios.post(
+        "https://launchly-production-a598.up.railway.app/export-pdf",
         {
           cover_letter: result,
           user_info: {
