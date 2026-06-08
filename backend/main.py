@@ -31,7 +31,6 @@ async def research_stream(request: ResearchRequest):
             result = await loop.run_in_executor(
                 None, run_crew, request.company_name, request.user_background, request.tone
             )
-            print("JOBS RAW:", repr(result.tasks_output[1].raw))
 
             jobs_raw = result.tasks_output[1].raw
             jobs_clean = re.sub(r"```json|```", "", jobs_raw).strip()
@@ -56,7 +55,7 @@ async def research_stream(request: ResearchRequest):
 async def export_pdf(data: dict):
     filename = generate_pdf(
         data["cover_letter"],
-        "cover_letter.pdf",
+        "/tmp/cover_letter.pdf",
         user_info=data.get("user_info", {})
     )
-    return FileResponse(filename, media_type="application/pdf", filename="cover_letter.pdf")
+    return FileResponse("/tmp/cover_letter.pdf", media_type="application/pdf", filename="cover_letter.pdf")
