@@ -31,34 +31,35 @@ const DARK = {
   successSoft: "#0D2E1F",
 };
 
-const labelStyle = {
-  display: "block",
-  fontSize: "12px",
-  fontWeight: "500",
-  color: C.muted,
-  marginBottom: "6px",
-  letterSpacing: "0.02em",
-};
-
-const inputBase = {
-  width: "100%",
-  padding: "10px 13px",
-  background: C.surface,
-  border: `1px solid ${C.border}`,
-  borderRadius: "8px",
-  color: C.text,
-  fontSize: "14px",
-  outline: "none",
-  boxSizing: "border-box",
-  fontFamily: "inherit",
-  transition: "border-color 0.15s",
-};
-
-function Field({ label, name, placeholder, onChange, type = "text" }) {
+function Field({ label, name, placeholder, onChange, type = "text", C }) {
   const [focused, setFocused] = useState(false);
+  const inputBase = {
+    width: "100%",
+    padding: "10px 13px",
+    background: C.surface,
+    border: `1px solid ${C.border}`,
+    borderRadius: "8px",
+    color: C.text,
+    fontSize: "14px",
+    outline: "none",
+    boxSizing: "border-box",
+    fontFamily: "inherit",
+    transition: "border-color 0.15s",
+  };
   return (
     <div>
-      <label style={labelStyle}>{label}</label>
+      <label
+        style={{
+          display: "block",
+          fontSize: "12px",
+          fontWeight: "500",
+          color: C.muted,
+          marginBottom: "6px",
+          letterSpacing: "0.02em",
+        }}
+      >
+        {label}
+      </label>
       <input
         type={type}
         name={name}
@@ -75,11 +76,35 @@ function Field({ label, name, placeholder, onChange, type = "text" }) {
   );
 }
 
-function TextArea({ label, name, placeholder, onChange }) {
+function TextArea({ label, name, placeholder, onChange, C }) {
   const [focused, setFocused] = useState(false);
+  const inputBase = {
+    width: "100%",
+    padding: "10px 13px",
+    background: C.surface,
+    border: `1px solid ${C.border}`,
+    borderRadius: "8px",
+    color: C.text,
+    fontSize: "14px",
+    outline: "none",
+    boxSizing: "border-box",
+    fontFamily: "inherit",
+    transition: "border-color 0.15s",
+  };
   return (
     <div>
-      <label style={labelStyle}>{label}</label>
+      <label
+        style={{
+          display: "block",
+          fontSize: "12px",
+          fontWeight: "500",
+          color: C.muted,
+          marginBottom: "6px",
+          letterSpacing: "0.02em",
+        }}
+      >
+        {label}
+      </label>
       <textarea
         name={name}
         placeholder={placeholder}
@@ -98,7 +123,7 @@ function TextArea({ label, name, placeholder, onChange }) {
   );
 }
 
-function SectionLabel({ children }) {
+function SectionLabel({ children, C }) {
   return (
     <p
       style={{
@@ -115,7 +140,7 @@ function SectionLabel({ children }) {
   );
 }
 
-function Divider() {
+function Divider({ C }) {
   return (
     <div style={{ height: "1px", background: C.border, margin: "24px 0" }} />
   );
@@ -124,6 +149,30 @@ function Divider() {
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
   const C = darkMode ? DARK : LIGHT;
+
+  const inputBase = {
+    width: "100%",
+    padding: "10px 13px",
+    background: C.surface,
+    border: `1px solid ${C.border}`,
+    borderRadius: "8px",
+    color: C.text,
+    fontSize: "14px",
+    outline: "none",
+    boxSizing: "border-box",
+    fontFamily: "inherit",
+    transition: "border-color 0.15s",
+  };
+
+  const labelStyle = {
+    display: "block",
+    fontSize: "12px",
+    fontWeight: "500",
+    color: C.muted,
+    marginBottom: "6px",
+    letterSpacing: "0.02em",
+  };
+
   const [form, setForm] = useState({
     company_name: "",
     user_background: {
@@ -210,9 +259,7 @@ export default function App() {
                   : JSON.stringify(data.jobs);
               const parsed = JSON.parse(raw);
               setJobs(Array.isArray(parsed) ? parsed : []);
-              console.log("jobs parsed:", parsed);
-            } catch (e) {
-              console.error("Jobs parse error:", e, data.jobs);
+            } catch {
               setJobs([]);
             }
             setLoading(false);
@@ -374,7 +421,7 @@ export default function App() {
             padding: "28px",
           }}
         >
-          <SectionLabel>Target</SectionLabel>
+          <SectionLabel C={C}>Target</SectionLabel>
           <div
             style={{
               display: "grid",
@@ -387,18 +434,20 @@ export default function App() {
               name="company_name"
               placeholder="Stripe"
               onChange={handleChange}
+              C={C}
             />
             <Field
               label="Role"
               name="target_role"
               placeholder="Backend Engineer"
               onChange={handleChange}
+              C={C}
             />
           </div>
 
-          <Divider />
+          <Divider C={C} />
 
-          <SectionLabel>Your Details</SectionLabel>
+          <SectionLabel C={C}>Your Details</SectionLabel>
           <div
             style={{
               display: "grid",
@@ -411,30 +460,35 @@ export default function App() {
               name="name"
               placeholder="John"
               onChange={handleChange}
+              C={C}
             />
             <Field
               label="Last name"
               name="last_name"
               placeholder="Doe"
               onChange={handleChange}
+              C={C}
             />
             <Field
               label="Email"
               name="email"
               placeholder="john@gmail.com"
               onChange={handleChange}
+              C={C}
             />
             <Field
               label="Phone"
               name="phone"
               placeholder="+1 234 567 8900"
               onChange={handleChange}
+              C={C}
             />
             <Field
               label="Location"
               name="location"
               placeholder="San Francisco, CA"
               onChange={handleChange}
+              C={C}
             />
             <Field
               label="Years of experience"
@@ -442,6 +496,7 @@ export default function App() {
               placeholder="3"
               type="number"
               onChange={handleChange}
+              C={C}
             />
           </div>
           <div style={{ marginTop: "12px" }}>
@@ -450,6 +505,7 @@ export default function App() {
               name="skills"
               placeholder="Python, FastAPI, React, Docker"
               onChange={handleChange}
+              C={C}
             />
           </div>
           <div style={{ marginTop: "12px" }}>
@@ -458,10 +514,11 @@ export default function App() {
               name="summary"
               placeholder="Brief background — what you build, what you're good at."
               onChange={handleChange}
+              C={C}
             />
           </div>
 
-          <Divider />
+          <Divider C={C} />
 
           <div>
             <label style={labelStyle}>Tone</label>
@@ -484,7 +541,7 @@ export default function App() {
             </select>
           </div>
 
-          <Divider />
+          <Divider C={C} />
 
           <button
             onClick={handleSubmit}
@@ -678,7 +735,7 @@ export default function App() {
                 marginBottom: "20px",
               }}
             >
-              <SectionLabel>Cover Letter</SectionLabel>
+              <SectionLabel C={C}>Cover Letter</SectionLabel>
               <div style={{ display: "flex", gap: "8px" }}>
                 <button
                   onClick={handleCopy}
@@ -718,7 +775,7 @@ export default function App() {
                 whiteSpace: "pre-wrap",
                 fontSize: "14px",
                 lineHeight: "1.85",
-                color: "#444",
+                color: darkMode ? "#C8C7D8" : "#444",
               }}
             >
               {result}
