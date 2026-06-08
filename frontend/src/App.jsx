@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const C = {
+const LIGHT = {
   bg: "#FAFAF9",
   surface: "#FFFFFF",
   border: "#E8E7E2",
@@ -14,6 +14,21 @@ const C = {
   errorSoft: "#FEF2F2",
   success: "#00C48C",
   successSoft: "#F0FDF8",
+};
+
+const DARK = {
+  bg: "#0A0A0F",
+  surface: "#111118",
+  border: "#1E1E2E",
+  borderFocus: "#00C48C",
+  text: "#F0EFF8",
+  muted: "#6B6A80",
+  subtle: "#1A1A2E",
+  accent: "#00C48C",
+  error: "#E24B4A",
+  errorSoft: "#2E0D0D",
+  success: "#00C48C",
+  successSoft: "#0D2E1F",
 };
 
 const labelStyle = {
@@ -107,6 +122,8 @@ function Divider() {
 }
 
 export default function App() {
+  const [darkMode, setDarkMode] = useState(false);
+  const C = darkMode ? DARK : LIGHT;
   const [form, setForm] = useState({
     company_name: "",
     user_background: {
@@ -268,6 +285,7 @@ export default function App() {
           height: "60px",
           display: "flex",
           alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
         <div
@@ -297,6 +315,20 @@ export default function App() {
             }}
           />
         </div>
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          style={{
+            background: "transparent",
+            border: `1px solid ${C.border}`,
+            borderRadius: "8px",
+            padding: "6px 12px",
+            cursor: "pointer",
+            fontSize: "13px",
+            color: C.muted,
+          }}
+        >
+          {darkMode ? "☀ Light" : "◑ Dark"}
+        </button>
       </div>
 
       <div
