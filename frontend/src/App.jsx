@@ -192,22 +192,21 @@ export default function App() {
     }
   };
 
-  const { company_name, user_background } = form;
-
-  if (
-    !company_name.trim() ||
-    !user_background.name.trim() ||
-    !user_background.target_role.trim() ||
-    !user_background.skills.trim() ||
-    !user_background.experience_years.trim()
-  ) {
-    setError(
-      "Company, name, target role, skills, and years of experience are required.",
-    );
-    return;
-  }
-
   const handleSubmit = async () => {
+    const { company_name, user_background } = form;
+
+    if (
+      !company_name.trim() ||
+      !user_background.name.trim() ||
+      !user_background.target_role.trim() ||
+      !user_background.skills.trim() ||
+      !user_background.experience_years.trim()
+    ) {
+      setError(
+        "Company, name, target role, skills, and years of experience are required.",
+      );
+      return;
+    }
     setLoading(true);
     setError(null);
     setResult(null);
