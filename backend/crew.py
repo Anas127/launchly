@@ -8,13 +8,27 @@ import os
 
 
 def company_exists(company_name: str) -> bool:
-    response = requests.post(
-        "https://google.serper.dev/search",
-        headers={
-            "X-API-KEY": os.getenv("SERPER_API_KEY"), "Content-Type": "application/json"},
-        json={"q": f"{company_name} company"}
-    )
-    data = response.json()
+    api_key = os.getenv("SERPER_API_KEY")
+
+    if not api_key:
+        raise RuntimeError("SERPER_API_KEY is not configured.")
+
+    try:
+        response = requests.post(
+            "https://google.serper.dev/search",
+            headers={
+                "X-API-KEY": api_key,
+                "Content-Type": "application/json",
+            },
+            json={"q": f"{company_name} company"},
+            timeout=10,
+        )
+
+        response.raise_for_status()
+        data = response.json()
+
+    except requests.RequestException:
+        return False
     organic = data.get("organic", [])
     knowledge_graph = data.get("knowledgeGraph", {})
 

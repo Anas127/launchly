@@ -1,6 +1,6 @@
 from crewai import Agent
 
-from crewai import Agent
+
 
 writer = Agent(
     role="Cover Letter Writer",

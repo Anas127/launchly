@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const LIGHT = {
   bg: "#FAFAF9",
@@ -14,21 +15,6 @@ const LIGHT = {
   errorSoft: "#FEF2F2",
   success: "#00C48C",
   successSoft: "#F0FDF8",
-};
-
-const DARK = {
-  bg: "#0A0A0F",
-  surface: "#111118",
-  border: "#1E1E2E",
-  borderFocus: "#00C48C",
-  text: "#F0EFF8",
-  muted: "#6B6A80",
-  subtle: "#1A1A2E",
-  accent: "#00C48C",
-  error: "#E24B4A",
-  errorSoft: "#2E0D0D",
-  success: "#00C48C",
-  successSoft: "#0D2E1F",
 };
 
 function Field({ label, name, placeholder, onChange, type = "text", C }) {
@@ -147,8 +133,7 @@ function Divider({ C }) {
 }
 
 export default function App() {
-  const [darkMode, setDarkMode] = useState(false);
-  const C = darkMode ? DARK : LIGHT;
+  const C = LIGHT;
 
   const inputBase = {
     width: "100%",
@@ -207,6 +192,21 @@ export default function App() {
     }
   };
 
+  const { company_name, user_background } = form;
+
+  if (
+    !company_name.trim() ||
+    !user_background.name.trim() ||
+    !user_background.target_role.trim() ||
+    !user_background.skills.trim() ||
+    !user_background.experience_years.trim()
+  ) {
+    setError(
+      "Company, name, target role, skills, and years of experience are required.",
+    );
+    return;
+  }
+
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
@@ -225,14 +225,19 @@ export default function App() {
         },
       };
 
-      const response = await fetch(
-        "https://launchly-production-a598.up.railway.app/research-stream",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        },
-      );
+      const response = await fetch(`${API_URL}/research-stream`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      if (!response.body) {
+        throw new Error("No response body received from the server.");
+      }
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
@@ -283,7 +288,7 @@ export default function App() {
   const downloadPdf = async () => {
     try {
       const response = await axios.post(
-        "https://launchly-production-a598.up.railway.app/export-pdf",
+        `${API_URL}/export-pdf`,
         {
           cover_letter: result,
           user_info: {
@@ -332,7 +337,7 @@ export default function App() {
           height: "60px",
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "flex-start",
         }}
       >
         <div
@@ -362,20 +367,6 @@ export default function App() {
             }}
           />
         </div>
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          style={{
-            background: "transparent",
-            border: `1px solid ${C.border}`,
-            borderRadius: "8px",
-            padding: "6px 12px",
-            cursor: "pointer",
-            fontSize: "13px",
-            color: C.muted,
-          }}
-        >
-          {darkMode ? "☀ Light" : "◑ Dark"}
-        </button>
       </div>
 
       <div
@@ -775,7 +766,7 @@ export default function App() {
                 whiteSpace: "pre-wrap",
                 fontSize: "14px",
                 lineHeight: "1.85",
-                color: darkMode ? "#C8C7D8" : "#444",
+                color: "#444",
               }}
             >
               {result}

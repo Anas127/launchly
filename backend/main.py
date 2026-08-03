@@ -1,3 +1,4 @@
+from tempfile import NamedTemporaryFile
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, FileResponse
@@ -8,12 +9,18 @@ import json
 import asyncio
 import re
 import json as json_lib
+from tempfile import NamedTemporaryFile
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://launchly-kappa.vercel.app",
+        "http://localhost:5173",
+        "http://localhost:5174",
+    ],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -53,9 +60,15 @@ async def research_stream(request: ResearchRequest):
 
 @app.post("/export-pdf")
 async def export_pdf(data: dict):
-    filename = generate_pdf(
-        data["cover_letter"],
-        "/tmp/cover_letter.pdf",
-        user_info=data.get("user_info", {})
+    with NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+        generate_pdf(
+            data["cover_letter"],
+            tmp.name,
+            user_info=data.get("user_info", {})
+        )
+
+    return FileResponse(
+        tmp.name,
+        media_type="application/pdf",
+        filename="cover_letter.pdf"
     )
-    return FileResponse("/tmp/cover_letter.pdf", media_type="application/pdf", filename="cover_letter.pdf")
